@@ -100,14 +100,44 @@ Generar una clave JWT aleatoria y reemplazar el valor de ejemplo.
 
 La clave secreta no debe publicarse en GitHub.
 
+### Generar una clave secreta JWT
+
+Para que la autenticación funcione, es necesario configurar `JWT_SECRET` con una clave secreta segura.
+
+Podés generar una clave aleatoria desde la terminal con Node.js:
+
+```bash
+node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"
+```
+
+El comando genera una cadena hexadecimal aleatoria de 64 caracteres.
+
+Copiá el resultado y utilizalo como valor de `JWT_SECRET` dentro del archivo `.env`:
+
+```dotenv
+JWT_SECRET=TU_CLAVE_GENERADA
+```
+
+**Importante:** nunca compartas la clave real ni subas el archivo `.env` a GitHub. El archivo `.env.example` solamente debe contener valores de ejemplo.
+
 **5. Iniciar MongoDB**
 
 Comprobar que MongoDB esté funcionando y que el servidor pueda conectarse mediante la URL configurada.
 
 **6. Ejecutar el backend**
 
+### Ejecutar el backend
+
+Para ejecutar el proyecto en modo desarrollo, con reinicio automático del servidor:
+
 ```bash
-node index.js
+npm run dev
+```
+
+Para iniciar el servidor normalmente:
+
+```bash
+npm start
 ```
 
 El servidor estará disponible en:
@@ -115,6 +145,8 @@ El servidor estará disponible en:
 ```text
 http://localhost:3000
 ```
+
+Antes de ejecutarlo, asegurate de que MongoDB esté funcionando y de haber configurado las variables de entorno.
 
 ## Endpoints de la API
 
