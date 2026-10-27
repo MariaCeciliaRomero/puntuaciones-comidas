@@ -125,7 +125,13 @@ export const obtenerPromedio = async (req, res) => {
           promedio: { $avg: '$valor' },
           totalPuntuaciones: { $sum: 1 }
         }
+      },
+      {
+        $sort: {
+          promedio: -1
+        }
       }
+      
     ]);
 
     // Enviar los resultados
