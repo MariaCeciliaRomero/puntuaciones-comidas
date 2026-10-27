@@ -5,7 +5,8 @@ import {
   obtenerPuntuaciones,
   obtenerPromedio,
   actualizarPuntuacion,
-  eliminarPuntuacion
+  eliminarPuntuacion,
+  obtenerRankingComidas
 } from '../controllers/puntuacionController.js';
 
 import { verificarToken } from '../middlewares/authMiddleware.js';
@@ -21,10 +22,13 @@ router.get('/promedio/:comidaId', obtenerPromedio);
 // Crear una puntuación
 router.post('/', verificarToken, crearPuntuacion);
 
+router.get('/ranking', obtenerRankingComidas);
+
 // Actualizar una puntuación
 router.put('/:id', verificarToken, actualizarPuntuacion);
 
-
 router.delete('/:id', verificarToken, eliminarPuntuacion);
+
+
 
 export default router;
