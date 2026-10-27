@@ -125,13 +125,7 @@ export const obtenerPromedio = async (req, res) => {
           promedio: { $avg: '$valor' },
           totalPuntuaciones: { $sum: 1 }
         }
-      },
-      {
-        $sort: {
-          promedio: -1
-        }
       }
-      
     ]);
 
     // Enviar los resultados
@@ -266,6 +260,55 @@ export const eliminarPuntuacion = async (req, res) => {
 
     res.status(500).json({
       mensaje: 'Error al eliminar la puntuación'
+    });
+  }
+};
+
+export const obtenerRankingComidas = async (req, res) => {
+  try {
+    const ranking = await Puntuacion.aggregate([
+      {
+        $group: {
+          _id: '$comida',
+          promedio: { $avg: '$valor' },
+          totalPuntuaciones: { $sum: 1 }
+        }
+      },
+      {
+        $sort: {
+          promedio: -1
+        }
+      },
+      {
+        $lookup: {
+          from: 'comidas',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'comida'
+        }
+      },
+      {
+        $unwind: '$comida'
+      },
+      {
+        $project: {
+          _id: 0,
+          comidaId: '$_id',
+          nombre: '$comida.nombre',
+          precio: '$comida.precio',
+          promedio: { $round: ['$promedio', 2] },
+          totalPuntuaciones: 1
+        }
+      }
+    ]);
+
+    res.status(200).json(ranking);
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      mensaje: 'Error al obtener el ranking de comidas'
     });
   }
 };
